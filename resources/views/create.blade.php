@@ -25,6 +25,13 @@
             <input type="number" name="harga" id="harga" class="form-control" placeholder="Enter book price" required>
         </div>
         
+        <!-- Diskon -->
+        <div class="form-group">
+            <label for="discount_percentage">Diskon (%)</label>
+            <input type="number" name="discount_percentage" class="form-control" value="{{ old('discount_percentage', $books->discount_percentage ?? 0) }}" min="0" max="100">
+        </div>
+        
+        
         <!-- Tanggal Terbit -->
         <div class="mb-3">
             <label for="tanggal_terbit" class="form-label">Tanggal Terbit</label>
@@ -34,10 +41,21 @@
         <div class="mb-3">
             <label for="image" class="form-label">Image</label>
             <input type="file" name="image" id="image" class="form-control" required>
+            <!-- Keterangan Gambar -->
+            <div class="mb-3">
+                <label for="deskripsi_gambar" class="form-label">Deskripsi Gambar</label>
+                <textarea type="textarea" name="review" id="review" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
+            </div>
         </div>
         <div id="gallery-images" class="form-group">
             <label for="gallery_images">Tambah Gambar Galeri:</label>
             <input type="file" name="gallery_images[]" class="form-control mb-2">
+            <!-- Keterangan Gambar -->
+            <div class="mb-3">
+                <label for="deskripsi_gambar" class="form-label">Deskripsi Gambar</label>
+                <textarea type="textarea" name="review" id="review" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
+            </div>
+
         </div>
         <button type="button" id="add-gallery" class="btn btn-secondary">Tambah Gambar Galeri</button>
         

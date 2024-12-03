@@ -17,18 +17,45 @@
                 </div>
     <!-- Tombol Create -->
     
-    @if (Auth::User()->level == 'admin')
+    @if (Auth::User()->level == 'admin' || Auth::User()->level == 'internal_reviewer')
     <div class="mb-3">
         <a href="{{ route('create') }}" class="btn btn-primary">
             Create
         </a>
+    </div>    
+    
+    <div class="mb-3">
+        <a href="{{ route('review') }}" class="btn btn-primary">
+            Review Buku
+        </a>
     </div>
     @endif
+    
     @if (@session('status'))
         <script>
             alert('{{ session('status') }}');
         </script>
     @endif
+
+    <div>
+        <div class="editorial-picks">
+            <h2>Editorial Picks</h2>
+            {{-- <div class="books">
+                @foreach($editorialBooks as $book)
+                    <div class="book">
+                        <img src="{{ asset('storage/' . $book->thumbnail) }}" alt="{{ $book->title }}">
+                        <h3>{{ $book->title }}</h3>
+                        <p>{{ $book->author }}</p>
+                    </div>
+                @endforeach
+            </div> --}}
+        </div>
+        
+        
+        
+    </div>
+
+</div>
 
     <table  class="datatable align-middle table table-light table-striped text-center">
         <thead class="thead-light">
@@ -55,7 +82,16 @@
                 </td>
                 <td>{{ $book->title }}</td>
                 <td>{{ $book->author }}</td>
-                <td>{{ "Rp" . number_format($book->harga, 2, ',', '.') }}</td>
+                <td>
+                    @if($book->discount_percentage > 0)
+                        <del>Rp. {{ number_format($book->harga, 0, ',', '.') }}</del>
+                        <span class="badge bg-success">{{ $book->discount_percentage }}% off</span>
+                        <br>
+                        Rp. {{ number_format($book->discounted_price, 0, ',', '.') }}
+                    @else
+                        Rp. {{ number_format($book->harga, 0, ',', '.') }}
+                    @endif
+                </td>
                 <td>{{ $book->tanggal_terbit }}</td>
 
                 
@@ -69,6 +105,24 @@
                         </form>
                         <!-- Tombol Edit -->
                         <a href="{{ route('edit', $book->id) }}" class="btn btn-info btn-sm">Edit</a>
+
+                        <!-- Review Buku Admin  -->
+                        <form action="{{ route('books.update', $book->id) }}" method="POST">
+
+                            
+                            @csrf
+                            @method('PUT')
+                            <label for="editorial_picks">Editorial Pick:</label>
+                            <input type="checkbox" id="editorial_picks" name="editorial_picks" value="1" {{ $book->editorial_picks ? 'checked' : '' }}>
+                            <button type="submit" 
+                            class="btn btn-secondary btn-sm"
+                            
+                            >Simpan Editorial Picks</button>
+                        </form>
+                        
+
+
+
                     @endif
                     <!-- Tombol Detail yang sama untuk Admin dan User -->
                     <a href="{{ route('books.show', $book->id) }}" class="btn btn-primary btn-sm">Detail</a>

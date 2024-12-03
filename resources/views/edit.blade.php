@@ -28,6 +28,13 @@
                         <input type="number" name="harga" id="harga" class="form-control" value="{{ old('harga', $books->harga) }}" required>
                     </div>
                     
+                    <!-- Diskon -->
+                    <div class="form-group">
+                        <label for="discount_percentage">Diskon (%)</label>
+                        <input type="number" name="discount_percentage" class="form-control" value="{{ old('discount_percentage', $books->discount_percentage ?? 0) }}" min="0" max="100">
+                    </div>
+                    
+                    
                     <!-- Input untuk Tanggal Terbit -->
                     <div class="mb-3">
                         <label for="tanggal_terbit" class="form-label">Tanggal Terbit:</label>
@@ -37,6 +44,11 @@
                    <div class="mb-3">
                        <label for="image" class="form-label">Image</label>
                        <input type="file" name="image" id="image" class="form-control" required>
+                       <!-- Keterangan Gambar -->
+                        <div class="mb-3">
+                            <label for="deskripsi_gambar" class="form-label">Deskripsi Gambar</label>
+                            <textarea type="textarea" name="review" id="review" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
+                        </div>
                    </div>
                     <!-- Existing gallery images -->
                     <h4>Gambar Galeri:</h4>
@@ -50,6 +62,11 @@
                     <div class="form-group">
                         <label for="gallery_images">Tambah Gambar Galeri:</label>
                         <input type="file" name="gallery_images[]" class="form-control" multiple>
+                        <!-- Keterangan Gambar -->
+                        <div class="mb-3">
+                            <label for="deskripsi_gambar" class="form-label">Deskripsi Gambar</label>
+                            <textarea type="textarea" name="review" id="review" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
+                        </div>
                     </div>
                     <!-- Tombol Update -->
                     <div class="d-flex justify-content-between">

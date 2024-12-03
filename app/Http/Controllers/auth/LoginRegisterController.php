@@ -63,7 +63,7 @@ class LoginRegisterController extends Controller
             // Regenerate session
             $request->session()->regenerate();
 
-            Mail::to($user->email)->send(new RegistrationSuccess($user));
+            // Mail::to($user->email)->send(new RegistrationSuccess($user));
 
             // Redirect to dashboard with success message
             return redirect('/buku')->with('login', 'You have successfully registered & logged in!');

@@ -23,8 +23,17 @@ Route::middleware('auth')->group(function () {
         Route::post('/store-buku', [BooksController::class, 'store'])->name('buku.store');
         Route::get('/buku/{id}/edit', [BooksController::class, 'edit'])->name('edit');
         Route::put('/buku/{id}/update', [BooksController::class, 'update'])->name('update');
+        Route::get('/buku/reviewbuku', [BooksController::class, 'review'])->name('review');
+
     });
-});
+
+    Route::middleware(['auth','internal_reviewer'])->group(function() {
+        Route::get('/buku/reviewbuku', [BooksController::class, 'review'])->name('review');
+        Route::get('/buku/list-review', [BooksController::class, 'getReview'])->name('list-review');
+        Route::post('/buku/reviewbuku/store',[BooksController::class,'storeReview'])->name('review-store');
+    });
+    }
+);
 
 
 Route::controller(LoginRegisterController::class)->group(function() {

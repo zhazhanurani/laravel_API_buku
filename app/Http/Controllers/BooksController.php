@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Books;
-
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,9 +32,11 @@ class BooksController extends Controller
         'title' => 'required|string',
         'author' => 'required|string|max:30',
         'harga' => 'required|numeric',
+        'discount_percentage' => 'nullable|numeric|min:0|max:100',
         'tanggal_terbit' => 'required|date',
         'image' => 'required|file|mimes:jpeg,jpg,png,gif|max:10000',
-        'gallery_images.*' => 'required|file|mimes:jpeg,jpg,png,gif|max:10000', // Validation for multiple images
+        'gallery_images.*' => 'required|file|mimes:jpeg,jpg,png,gif|max:10000', // Validation for multiple images]
+        'deskripsi_gambar' => 'nullable|string|max:255'
     ]);
 
     // Store the image
@@ -46,8 +48,11 @@ class BooksController extends Controller
         'title' => $request->title,
         'author' => $request->author,
         'harga' => $request->harga,
+        'discount_percentage' => $request->discount_percentage,
         'tanggal_terbit' => $request->tanggal_terbit,
-        'image' => basename($imagePath)
+        'image' => basename($imagePath),
+        'deskripsi_gambar' => $request->deskripsi_gambar
+        
     ]);
 
     // Store gallery images if any
@@ -59,14 +64,7 @@ class BooksController extends Controller
             ]);
         }
     }
-
-    // Response
-    return response()->json([
-        'success' => true,
-        'message' => 'Buku berhasil ditambahkan!',
-        'data' => $book
-    ], 201);
-
+    
     return redirect('/buku')->with('status', 'Data Buku Berhasil Ditambahkan');
 }
     
@@ -103,8 +101,10 @@ public function destroy($id)
             'title' => 'required|string',
             'author' => 'required|string|max:30',
             'harga' => 'required|numeric',
+            'discount_percentage' => 'required|numeric|min:0|max:100',
             'tanggal_terbit' => 'required|date',
             'image' => 'mimes:jpeg,jpg,png,gif|nullable|max:10000',
+            'deskripsi_gambar' => 'nullable|string|max:255'
         ]);
     
         // Update the book data
@@ -112,7 +112,10 @@ public function destroy($id)
             'title' => $request->title,
             'author' => $request->author,
             'harga' => $request->harga,
-            'tanggal_terbit' => $request->tanggal_terbit
+            'tanggal_terbit' => $request->tanggal_terbit,
+            'discount_percentage' => $request->discount_percentage,
+            'deskripsi_gambar' => $request->deskripsi_gambar
+            
         ];
     
         // Handle the image update if a new one is uploaded
@@ -125,6 +128,9 @@ public function destroy($id)
             // Store the new image
             $imagePath = $request->file('image')->store('public/img');
             $data['image'] = basename($imagePath);
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('galleries', 'public');
+            }
         }
     
         // Update the book data
@@ -137,13 +143,77 @@ public function destroy($id)
                 $book->galleries()->create([
                     'image' => basename($galleryPath),
                     'book_id' => $book->id,
+                    'deskripsi_gambar' => $request-> deskripsi_gambar
                 ]);
             }
         }
     
         return redirect('/buku')->with('status', 'Data Buku Berhasil Diubah');
     }
+    public function review()
+{
+    $books = Books::all();
+    return view('reviewbuku',compact('books'));
 }
+
+public function storeReview(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string',
+        'review' => 'nullable|string|max:1000',
+        'tags' => 'required|array|min:1',
+        'tags.*' => 'required|string|max:255'
+    ]);
+
+    // dd($request->tags);
+
+    Review::create([
+        'id_buku' => $request->title,
+        'review' => $request->review,
+        'tag' => $request->tags
+    ]);
+
+    return redirect()->back()->with('success','Review Added');
+}
+
+// public function editorial_picks()
+// {
+
+// };
+
+
+
+
+public function getReview()
+{
+    $list_review = Review::all();
+    return view('listReviewBuku',compact('list_review'));
+}
+
+public function request(Request $request, $id)
+{
+    $book = Books::findOrFail($id);
+    $book->update([
+        'editorial_picks' => $request->has('editorial_picks'),
+        // update field lain
+    ]);
+
+    $editorialBooks = Books::where('editorial_pick', true)
+    ->take(5)
+    ->get();    
+
+    return redirect()->route('books.index')->with('success', 'Buku berhasil diperbarui!');
+}
+
+
+
+
+
+}
+
+
+
+
 
 // public function search(Request $request){
 //     $batas = 5;
