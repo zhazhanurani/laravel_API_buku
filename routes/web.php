@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\Auth\LoginRegisterController;
+use App\Models\Books;
 
 Route::get('/', function () {
     return view('home');
@@ -16,15 +17,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/buku/{id}/detail', [BooksController::class, 'show'])->name('books.show');
 
     // Grup rute khusus admin dengan middleware 'auth' dan 'admin'
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware('admin')->group(function () {
         Route::get('/buku/create', [BooksController::class, 'create'])->name('create');
         Route::post('/buku-store', [BooksController::class, 'store'])->name('store.buku');
         Route::delete('/buku/{id}', [BooksController::class, 'destroy'])->name('destroy');
         Route::post('/store-buku', [BooksController::class, 'store'])->name('buku.store');
         Route::get('/buku/{id}/edit', [BooksController::class, 'edit'])->name('edit');
         Route::put('/buku/{id}/update', [BooksController::class, 'update'])->name('update');
-        Route::get('/buku/reviewbuku', [BooksController::class, 'review'])->name('review');
-
+        Route::post('/buku/edit/{id}',[BooksController::class,'setEditorial'])->name('editorial');
     });
 
     Route::middleware(['auth','internal_reviewer'])->group(function() {

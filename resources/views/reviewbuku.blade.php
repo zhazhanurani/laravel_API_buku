@@ -1,7 +1,14 @@
 @extends('components.layout')
 @section('content')
 <div class="container mt-5">
+
+    @if (@session('success'))
+    <script>
+        alert('{{ session('success') }}');
+    </script>
+    @endif
     <h4 class="mb-4">Review Buku</h4>
+    
 
     <form action="{{ route('review-store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -79,7 +86,7 @@
         <!-- Submit and Back Buttons -->
         <div class="mt-4 d-flex justify-content-between">
             <!-- Tombol Back -->
-            <a href="{{'/buku'}}" class="btn btn-secondary">
+            <a href="{{route('buku')}}" class="btn btn-secondary">
                 Back
             </a>
             <!-- Tombol Submit -->

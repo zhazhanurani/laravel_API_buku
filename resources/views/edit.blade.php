@@ -47,7 +47,7 @@
                        <!-- Keterangan Gambar -->
                         <div class="mb-3">
                             <label for="deskripsi_gambar" class="form-label">Deskripsi Gambar</label>
-                            <textarea type="textarea" name="review" id="review" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
+                            <textarea type="textarea" name="deskripsi_gambar" id="deskripsi_gambar" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
                         </div>
                    </div>
                     <!-- Existing gallery images -->
@@ -65,7 +65,7 @@
                         <!-- Keterangan Gambar -->
                         <div class="mb-3">
                             <label for="deskripsi_gambar" class="form-label">Deskripsi Gambar</label>
-                            <textarea type="textarea" name="review" id="review" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
+                            <textarea type="textarea" name="deskripsi_gambar" id="deskripsi_gambar" class="form-control" placeholder="tambahkan deskripsi gambar" required></textarea>
                         </div>
                     </div>
                     <!-- Tombol Update -->

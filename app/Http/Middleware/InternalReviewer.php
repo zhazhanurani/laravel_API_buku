@@ -16,9 +16,9 @@ class InternalReviewer
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->level != 'internal_reviewer') {
-            return redirect()->back(); // Mengembalikan pengguna non-internal_reviewer
+        if (Auth::check() && (Auth::user()->level == 'internal_reviewer' || Auth::user()->level == 'admin')) {
+            return $next($request); 
         }
-        return $next($request); // Melanjutkan jika pengguna adalah internal_reviewer
+        return redirect()->back(); // Mengembalikan pengguna non-internal_reviewer
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('review',function(Blueprint $table){
             $table->id();
             $table->unsignedBigInteger('id_buku');
+            $table->unsignedBigInteger('id_user');
             $table->string('review');
             // $table->string('tag');
             $table->json('tag');
@@ -21,6 +22,7 @@ return new class extends Migration
 
 
             $table->foreign('id_buku')->references('id')->on('books');
+            $table->foreign('id_user')->references('id')->on('users');
         });
     }
 

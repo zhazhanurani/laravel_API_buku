@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('deskripsi_gambar')->nullable();
             $table->boolean('editorial_picks')->default(false);
+            $table->unsignedTinyInteger('discount_percentage')->nullable()->default(0); // Diskon dalam %]
             $table->timestamps();
         });
     }

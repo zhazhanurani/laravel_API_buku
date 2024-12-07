@@ -9,21 +9,25 @@
                         <div class="alert alert-success">
                             {{ $message }}
                         </div>
-                    @else
-                        <div class="alert alert-success">
-                            You are logged in!
-                        </div>
                     @endif
                 </div>
     <!-- Tombol Create -->
     
-    @if (Auth::User()->level == 'admin' || Auth::User()->level == 'internal_reviewer')
+    @if (Auth::user()->level == 'admin')
     <div class="mb-3">
         <a href="{{ route('create') }}" class="btn btn-primary">
             Create
         </a>
     </div>    
     
+    <div class="mb-3">
+        <a href="{{ route('review') }}" class="btn btn-primary">
+            Review Buku
+        </a>
+    </div>
+    @endif
+
+    @if (Auth::user()->level == 'internal_reviewer')
     <div class="mb-3">
         <a href="{{ route('review') }}" class="btn btn-primary">
             Review Buku
@@ -40,15 +44,15 @@
     <div>
         <div class="editorial-picks">
             <h2>Editorial Picks</h2>
-            {{-- <div class="books">
-                @foreach($editorialBooks as $book)
+            <div class="books">
+                @foreach($editorialPicks as $book)
                     <div class="book">
-                        <img src="{{ asset('storage/' . $book->thumbnail) }}" alt="{{ $book->title }}">
+                        <img src="{{ asset('storage/img/' . $book->image) }}" alt="{{ $book->title }}">
                         <h3>{{ $book->title }}</h3>
                         <p>{{ $book->author }}</p>
                     </div>
                 @endforeach
-            </div> --}}
+            </div>
         </div>
         
         
@@ -107,17 +111,11 @@
                         <a href="{{ route('edit', $book->id) }}" class="btn btn-info btn-sm">Edit</a>
 
                         <!-- Review Buku Admin  -->
-                        <form action="{{ route('books.update', $book->id) }}" method="POST">
-
-                            
+                        <form action="{{ route('editorial', $book->id) }}" method="POST">
                             @csrf
-                            @method('PUT')
                             <label for="editorial_picks">Editorial Pick:</label>
                             <input type="checkbox" id="editorial_picks" name="editorial_picks" value="1" {{ $book->editorial_picks ? 'checked' : '' }}>
-                            <button type="submit" 
-                            class="btn btn-secondary btn-sm"
-                            
-                            >Simpan Editorial Picks</button>
+                            <button type="submit" class="btn btn-secondary btn-sm">Simpan Editorial Picks</button>
                         </form>
                         
 

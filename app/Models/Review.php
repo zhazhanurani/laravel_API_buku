@@ -13,7 +13,8 @@ class Review extends Model
     protected $fillable = [
         'id_buku',
         'review',
-        'tag'
+        'tag',
+        'id_user'
     ];
 
     protected $casts = [
@@ -23,5 +24,10 @@ class Review extends Model
     public function book()
     {
         return $this->belongsTo(Books::class,'id_buku','id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'id_user','id');
     }
 }
